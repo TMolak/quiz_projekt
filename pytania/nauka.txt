@@ -1,0 +1,6 @@
+Jaka jest największa planeta w Układzie Słonecznym?|Mars;Jowisz;Ziemia;Saturn|Jowisz
+Który pierwiastek chemiczny ma symbol 'H'?|Hel;Wodór;Węgiel;Azot|Wodór
+Jak nazywa się proces, w którym rośliny przekształcają światło słoneczne w energię?|Fotosynteza;Respiracja;Fermentacja;Transpiracja|Fotosynteza
+Który gaz jest niezbędny do oddychania?|Azot;Tlen;Dwutlenek węgla;Hel|Tlen
+Jak nazywa się najtwardszy naturalnie występujący minerał?|Granat;Diament;Kwarc;Topaz|Diament
+Test|test;test;test1|test1
