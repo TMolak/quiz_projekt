@@ -3,4 +3,18 @@ Który pierwiastek chemiczny ma symbol 'H'?|Hel;Wodór;Węgiel;Azot|Wodór
 Jak nazywa się proces, w którym rośliny przekształcają światło słoneczne w energię?|Fotosynteza;Respiracja;Fermentacja;Transpiracja|Fotosynteza
 Który gaz jest niezbędny do oddychania?|Azot;Tlen;Dwutlenek węgla;Hel|Tlen
 Jak nazywa się najtwardszy naturalnie występujący minerał?|Granat;Diament;Kwarc;Topaz|Diament
-Test|test;test;test1|test1
+Który pierwiastek chemiczny ma symbol 'O'?|Hel;Węgiel;Azot;Tlen|Tlen
+Jak nazywa się najbliższa Ziemi gwiazda?|Proxima Centauri;Sirius;Betelgeuse;Słońce|Słońce
+Kto jest twórcą teorii względności?|Isaac Newton;Albert Einstein;Galileo Galilei;Nikola Tesla|Albert Einstein
+Który organ w ludzkim ciele jest odpowiedzialny za pompowanie krwi?|Mózg;Płuca;Serce;Wątroba|Serce
+Jak nazywa się najmniejsza jednostka materii?|Komórka;Cząsteczka;Atom;Jądro|Atom
+Jak nazywa się proces zamiany cieczy w gaz?|Kondensacja;Sublimacja;Parowanie;Topnienie|Parowanie
+Który układ w ludzkim ciele odpowiada za produkcję hormonów?|Układ krążenia;Układ trawienny;Układ hormonalny;Układ nerwowy|Układ hormonalny
+Jak nazywa się planeta najbliższa Słońcu?|Mars;Wenus;Merkury;Jowisz|Merkury
+Kto odkrył penicylinę?|Marie Curie;Alexander Fleming;Louis Pasteur;Gregor Mendel|Alexander Fleming
+Który pierwiastek jest najobficiej występujący we wszechświecie?|Hel;Wodór;Tlen;Węgiel|Wodór
+Jak nazywa się układ kostny człowieka?|Układ mięśniowy;Układ szkieletowy;Układ krążenia;Układ nerwowy|Układ szkieletowy
+Która planeta jest znana jako Czerwona Planeta?|Wenus;Mars;Saturn;Neptun|Mars
+Jakie jest chemiczne oznaczenie wody?|HO;H2O;O2H;OH2|H2O
+Jak nazywa się proces, w którym lód zamienia się w wodę?|Parowanie;Topnienie;Kondensacja;Sublimacja|Topnienie
+Kto sformułował prawa ruchu i grawitacji?|Isaac Newton;Albert Einstein;Galileo Galilei;Johannes Kepler|Isaac Newton

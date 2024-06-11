@@ -5,13 +5,20 @@ import time
 LEADERBOARD_FILES = {
     'Nauka': 'leaderboard_nauka.txt',
     'Historia': 'leaderboard_historia.txt',
-    'Literatura': 'leaderboard_literatura.txt'
+    'Rozrywka': 'leaderboard_rozrywka.txt'
 }
+
+DIFFICULTY_LEVELS = {
+    'Łatwy': {'czas': 30, 'pytania': 6},
+    'Średni': {'czas': 20, 'pytania': 11},
+    'Trudny': {'czas': 10, 'pytania': 16}
+}
+
 
 def load_questions(file):
     questions = []
     try:
-        with open(file, 'r', encoding='utf-8') as f:
+        with open(file, 'r',encoding='utf-8' ) as f:
             for line in f:
                 line = line.strip()
                 if line:
@@ -28,11 +35,13 @@ def load_questions(file):
         st.error(f"File {file} not found.")
     return questions
 
+
 categories = {
     'Nauka': load_questions('pytania/nauka.txt'),
     'Historia': load_questions('pytania/historia.txt'),
-    'Literatura': load_questions('pytania/literatura.txt')
+    'Rozrywka': load_questions('pytania/rozrywka.txt')
 }
+
 
 def random_question(category):
     available_indices = list(set(range(len(categories[category]))) - set(st.session_state.asked_questions))
@@ -45,6 +54,7 @@ def random_question(category):
     random.shuffle(answers)
     return question, answers
 
+
 def initialize_session_state():
     st.session_state.page = 'start'
     st.session_state.points = 0
@@ -56,46 +66,54 @@ def initialize_session_state():
     st.session_state.checked = False
     st.session_state.asked_questions = []
     st.session_state.results = []
-    st.session_state.time_left = 30  # Timer for each question (in seconds)
-    st.session_state.score_saved = False  # Ensure score is saved only once
+    st.session_state.time_left = 30
+    st.session_state.score_saved = False
+    st.session_state.difficulty = None
+    st.session_state.num_questions = 0
+
 
 if 'page' not in st.session_state:
     initialize_session_state()
 
+
 def start_game():
+    st.session_state.page = 'select_difficulty'
+
+
+def select_difficulty(difficulty):
+    st.session_state.difficulty = difficulty
+    st.session_state.time_left = DIFFICULTY_LEVELS[difficulty]['czas']
+    st.session_state.num_questions = DIFFICULTY_LEVELS[difficulty]['pytania']
     st.session_state.page = 'select_mode'
+
 
 def select_category(category):
     st.session_state.page = 'quiz'
     st.session_state.category = category
     st.session_state.asked_questions = []
     st.session_state.results = []
-    st.session_state.time_left = 30
+    st.session_state.time_left = DIFFICULTY_LEVELS[st.session_state.difficulty]['czas']
     st.session_state.question, st.session_state.answers = random_question(category)
     st.session_state.correct_answer = st.session_state.question["poprawna"]
     st.session_state.picked_answer = None
     st.session_state.checked = False
     st.session_state.score_saved = False
 
+
 def reset_quiz():
     initialize_session_state()
 
+
 def next_question():
-    st.session_state.time_left = 30
+    st.session_state.time_left = DIFFICULTY_LEVELS[st.session_state.difficulty]['czas']
     st.session_state.question, st.session_state.answers = random_question(st.session_state.category)
-    if st.session_state.question is None:
+    if len(st.session_state.asked_questions) >= st.session_state.num_questions:
         st.session_state.page = 'end'
     else:
         st.session_state.correct_answer = st.session_state.question["poprawna"]
         st.session_state.picked_answer = None
         st.session_state.checked = False
 
-def save_results():
-    summary = "Quiz Results\n\n"
-    for idx, result in enumerate(st.session_state.results):
-        summary += f"Q{idx + 1}: {result['question']}\n"
-        summary += f"Your answer: {result['picked']} (Correct: {result['correct']})\n\n"
-    return summary
 
 def load_leaderboard(category):
     leaderboard = []
@@ -110,10 +128,12 @@ def load_leaderboard(category):
         pass
     return leaderboard
 
+
 def save_leaderboard(category, leaderboard):
     with open(LEADERBOARD_FILES[category], 'w', encoding='utf-8') as f:
         for entry in leaderboard:
             f.write(f"{entry['name']}:{entry['score']}\n")
+
 
 def update_leaderboard(name, score, category):
     leaderboard = load_leaderboard(category)
@@ -121,21 +141,23 @@ def update_leaderboard(name, score, category):
     leaderboard = sorted(leaderboard, key=lambda x: x['score'], reverse=True)
     save_leaderboard(category, leaderboard)
 
+
 def display_leaderboard(category):
     st.title(f"Leaderboard - {category}")
     leaderboard = load_leaderboard(category)
     for idx, entry in enumerate(leaderboard):
         st.write(f"{idx + 1}. {entry['name']} - {entry['score']} points")
 
+
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-local_css("style.css")
 
+local_css("style.css")
+# Strona startowa
 if st.session_state.page == 'start':
     st.title("Quiz Wiedzy")
-    st.write("Witamy w quizie wiedzy! Naciśnij 'Start gry', aby rozpocząć.")
     if st.button("Start gry"):
         start_game()
         st.experimental_rerun()
@@ -144,22 +166,29 @@ if st.session_state.page == 'start':
         st.write(f"**{category}**")
         display_leaderboard(category)
 
+# Strona z wyborem poziomu trudnosci
+elif st.session_state.page == 'select_difficulty':
+    st.title("Wybierz poziom trudności")
+    st.write("Im wyższy poziom trudności tym mniej czasu i więcej pytań")
+    for level in DIFFICULTY_LEVELS.keys():
+        if st.button(level):
+            select_difficulty(level)
+            st.experimental_rerun()
+# Strona z wyborem kategorii
 elif st.session_state.page == 'select_mode':
     st.title("Wybierz kategorię")
     st.write("Wybierz kategorię, w której chcesz odpowiadać na pytania.")
-    for categ in categories.keys():
-        if st.button(categ):
-            select_category(categ)
+    for cat in categories.keys():
+        if st.button(cat):
+            select_category(cat)
             st.experimental_rerun()
-
+# Strona z quizem
 elif st.session_state.page == 'quiz':
-    st.markdown('<div class="fade-in">', unsafe_allow_html=True)
     st.write("### Pytanie:")
     st.write(st.session_state.question["pytanie"])
 
     st.write("### Odpowiedzi:")
     st.session_state.picked_answer = st.radio("", st.session_state.answers, key="radio")
-    st.markdown('</div>', unsafe_allow_html=True)
 
     if st.session_state.checked:
         if st.session_state.picked_answer == st.session_state.correct_answer:
@@ -186,9 +215,10 @@ elif st.session_state.page == 'quiz':
                 st.experimental_rerun()
         with col2:
             st.write(f"Czas: {st.session_state.time_left}")
-            progress = st.progress(100 - (st.session_state.time_left * 100 // 30))
+            progress = st.progress(
+                100 - (st.session_state.time_left * 100 // DIFFICULTY_LEVELS[st.session_state.difficulty]['czas']))
 
-        # Countdown timer
+
         if st.session_state.time_left > 0:
             st.session_state.time_left -= 1
             time.sleep(1)
@@ -218,10 +248,16 @@ elif st.session_state.page == 'quiz':
     if st.button("Zakończ grę"):
         st.session_state.page = 'end'
         st.experimental_rerun()
-
+# Strona z koncem gry
 elif st.session_state.page == 'end':
     st.title("Koniec gry")
-    st.write("Gratulacje, odpowiedziałeś na wszystkie pytania w tej kategorii!")
+
+    correct_answers = st.session_state.points
+    total_questions = len(st.session_state.results)
+    score_percentage = (correct_answers / total_questions) * 100
+
+    st.write(f"Liczba poprawnych odpowiedzi: {correct_answers} z {total_questions}")
+    st.write(f"Procent poprawnych odpowiedzi: {score_percentage:.2f}%")
     st.write(f"Liczba punktów: {st.session_state.points}")
 
     name = st.text_input("Podaj swoje imię, aby zapisać wynik na tablicy liderów:")
@@ -235,9 +271,6 @@ elif st.session_state.page == 'end':
         st.write(f"Pytanie: {result['question']}")
         st.write(f"Twoja odpowiedź: {result['picked']} (Poprawna odpowiedź: {result['correct']})")
         st.write("")
-
-    summary = save_results()
-    st.download_button(label="Pobierz wyniki", data=summary, file_name='quiz_results.txt', mime='text/plain')
 
     if st.button("Zagraj ponownie"):
         reset_quiz()

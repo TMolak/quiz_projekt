@@ -9,7 +9,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .stButton>button {
-    background-color: #ff6666;
+    background-color: green;
     color: white;
     border: none;
     border-radius: 4px;
@@ -19,11 +19,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .stButton>button:hover {
-    background-color: #ff4d4d;
+    background-color: greenyellow;
 }
 
 .stProgress>div {
-    background-color: #ff6666;
+    background-color: greenyellow;
 }
 
 .stRadio label {
