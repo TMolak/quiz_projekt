@@ -160,7 +160,7 @@ if st.session_state.page == 'start':
     st.title("Quiz Wiedzy")
     if st.button("Start gry"):
         start_game()
-        st.experimental_rerun()
+        st.rerun()
     st.write("### Leaderboards:")
     for category in LEADERBOARD_FILES.keys():
         st.write(f"**{category}**")
@@ -173,15 +173,15 @@ elif st.session_state.page == 'select_difficulty':
     for level in DIFFICULTY_LEVELS.keys():
         if st.button(level):
             select_difficulty(level)
-            st.experimental_rerun()
+            st.rerun()
 # Strona z wyborem kategorii
 elif st.session_state.page == 'select_mode':
     st.title("Wybierz kategorię")
-    st.write("Wybierz kategorię, w której chcesz odpowiadać na pytania.")
+    st.write("Wybierz kategorię quizu.")
     for cat in categories.keys():
         if st.button(cat):
             select_category(cat)
-            st.experimental_rerun()
+            st.rerun()
 # Strona z quizem
 elif st.session_state.page == 'quiz':
     st.write("### Pytanie:")
@@ -212,7 +212,7 @@ elif st.session_state.page == 'quiz':
                     st.session_state.points += 1
                 else:
                     st.error(f"Niepoprawna odpowiedź. Poprawna odpowiedź to: {st.session_state.correct_answer}")
-                st.experimental_rerun()
+                st.rerun()
         with col2:
             st.write(f"Czas: {st.session_state.time_left}")
             progress = st.progress(
@@ -222,7 +222,7 @@ elif st.session_state.page == 'quiz':
         if st.session_state.time_left > 0:
             st.session_state.time_left -= 1
             time.sleep(1)
-            st.experimental_rerun()
+            st.rerun()
         else:
             st.session_state.checked = True
             result = {
@@ -236,18 +236,18 @@ elif st.session_state.page == 'quiz':
                 st.session_state.points += 1
             else:
                 st.error(f"Niepoprawna odpowiedź. Poprawna odpowiedź to: {st.session_state.correct_answer}")
-            st.experimental_rerun()
+            st.rerun()
 
     if st.session_state.checked:
         if st.button("Następne pytanie", key="nastepne_pytanie_button"):
             next_question()
-            st.experimental_rerun()
+            st.rerun()
 
     st.write("Liczba punktów:", st.session_state.points)
 
     if st.button("Zakończ grę"):
         st.session_state.page = 'end'
-        st.experimental_rerun()
+        st.rerun()
 # Strona z koncem gry
 elif st.session_state.page == 'end':
     st.title("Koniec gry")
@@ -260,11 +260,11 @@ elif st.session_state.page == 'end':
     st.write(f"Procent poprawnych odpowiedzi: {score_percentage:.2f}%")
     st.write(f"Liczba punktów: {st.session_state.points}")
 
-    name = st.text_input("Podaj swoje imię, aby zapisać wynik na tablicy liderów:")
+    name = st.text_input("Podaj swoje imię, aby zapisać wynik na tablicy wyników:")
     if name and not st.session_state.score_saved:
         update_leaderboard(name, st.session_state.points, st.session_state.category)
         st.session_state.score_saved = True
-        st.success("Wynik zapisany na tablicy liderów!")
+        st.success("Wynik zapisany na tablicy wyników!")
 
     st.write("### Podsumowanie:")
     for result in st.session_state.results:
@@ -274,7 +274,7 @@ elif st.session_state.page == 'end':
 
     if st.button("Zagraj ponownie"):
         reset_quiz()
-        st.experimental_rerun()
+        st.rerun()
 
     st.write("### Leaderboard:")
     display_leaderboard(st.session_state.category)
